@@ -612,8 +612,10 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
 
 .gf-logo {
   display: block;
-  width: 56px;
-  height: 56px;
+  width: 110px !important;
+  max-width: 110px !important;
+  height: 110px !important;
+  max-height: 110px !important;
   object-fit: contain;
   margin: 0 auto 8px;
   opacity: .88;
@@ -626,7 +628,9 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
 
 @media (max-width: 720px) {
   .gf-logo {
-    width: 46px;
-    height: 46px;
+    width: 46px !important;
+    max-width: 46px !important;
+    height: 46px !important;
+    max-height: 46px !important;
   }
 }
