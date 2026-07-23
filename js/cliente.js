@@ -62,8 +62,8 @@ async function loadItalianMunicipalities() {
 
 function validateIdentityCardNumber(value) {
   const normalized = normalizeDocument(value);
-  // CIE moderna: 2 lettere + 5 cifre + 2 lettere. Carta cartacea: 2 lettere + 7 cifre.
-  return /^(?:[A-Z]{2}\d{5}[A-Z]{2}|[A-Z]{2}\d{7})$/.test(normalized);
+  // Carta d’Identità Elettronica (CIE): 2 lettere + 5 cifre + 2 lettere.
+  return /^[A-Z]{2}\d{5}[A-Z]{2}$/.test(normalized);
 }
 
 function validateMunicipality(value) {
@@ -240,12 +240,12 @@ async function createBooking() {
 
   if (!bookingDate || !fieldId || !selectedStart) return showMessage("Seleziona data, campo e orario.", "warning");
   if (!nomeCliente || !telefono || !documentoNumero || !documentoData || !documentoRilasciatoDa) return showMessage("Compila tutti i dati obbligatori, compresi quelli della carta d’identità.", "warning");
-  if (!validateIdentityCardNumber(documentoNumero)) return showMessage("Il numero della carta d’identità non ha un formato italiano valido. Esempio: CA12345AA.", "error");
+  if (!validateIdentityCardNumber(documentoNumero)) return showMessage("Il numero della Carta d’Identità Elettronica non è valido. Usa il formato CA12345AA.", "error");
   if (documentoData > localTodayIso()) return showMessage("La data di rilascio della carta d’identità non può essere futura.", "error");
   if (!municipalitiesReady) return showMessage("L’elenco dei Comuni non è stato caricato. Aggiorna la pagina e riprova.", "error");
   if (!validateMunicipality(documentoRilasciatoDa)) return showMessage("Seleziona un Comune reale dall’elenco proposto.", "error");
   documentoRilasciatoDa = italianMunicipalities.get(normalizeSearchText(documentoRilasciatoDa));
-  if (!$("privacy").checked) return showMessage("Devi accettare l’uso dei dati per la prenotazione.", "warning");
+  if (!$("privacy").checked) return showMessage("Devi leggere e accettare l’informativa privacy per continuare.", "warning");
 
   const fieldName = fields.find(c => String(c.id) === String(fieldId))?.nome || "Campo";
   prenotaButton.disabled = true; prenotaButton.textContent = "Prenotazione in corso...";

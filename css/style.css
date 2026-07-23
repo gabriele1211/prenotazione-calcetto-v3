@@ -451,3 +451,28 @@ table { min-width: 1250px; }
 }
 .field-help.field-error { color: var(--danger); font-weight: 700; }
 input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
+
+/* V3.2.2 - Area Gestore, CIE e privacy */
+.admin-page { max-width: 1180px; }
+.admin-filters {
+  display: grid;
+  grid-template-columns: minmax(220px, 2fr) repeat(5, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.admin-filters label { margin-bottom: 0; }
+.admin-filter-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.centered-header { min-height: 142px; }
+.centered-header .header-action { z-index: 2; }
+.privacy-content h2 { margin-top: 28px; }
+.privacy-content h2:first-child { margin-top: 0; }
+.privacy-content p { line-height: 1.6; }
+.privacy-note { margin-top: 28px !important; padding: 14px; border-radius: 11px; background: var(--warning-bg); }
+.check-row a { color: var(--accent-dark); }
+@media (max-width: 1050px) {
+  .admin-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .admin-filters { grid-template-columns: 1fr; }
+  .centered-header { min-height: auto; }
+}
