@@ -76,9 +76,9 @@
             <input id="documento-data-rilascio" type="date" required>
             <small class="field-help">Non può essere successiva alla data odierna.</small>
           </label>
-          <label class="municipality-field">Comune di rilascio
-            <input id="documento-rilasciato-da" type="text" maxlength="100" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Inizia a scrivere il Comune" required aria-autocomplete="list" aria-controls="comuni-suggerimenti" aria-expanded="false">
-            <div id="comuni-suggerimenti" class="municipality-suggestions hidden" role="listbox"></div>
+          <label>Comune di rilascio
+            <input id="documento-rilasciato-da" type="text" maxlength="100" list="comuni-italiani" autocomplete="off" placeholder="Inizia a scrivere il Comune" required>
+            <datalist id="comuni-italiani"></datalist>
             <small id="comuni-status" class="field-help">Caricamento elenco ufficiale dei Comuni…</small>
           </label>
         </div>
@@ -108,12 +108,21 @@
     </div>
   </main>
 
-  <footer>
-    <p>Per modificare o annullare una prenotazione telefona al <a href="tel:+393286739425"><strong>328 673 9425</strong></a>.</p>
+  <footer class="site-footer">
+    <div class="footer-contact">
+      <p>Per modificare o annullare una prenotazione telefona al <a href="tel:+393286739425"><strong>328 673 9425</strong></a>.</p>
+    </div>
+    <div class="footer-signature" aria-label="Firma del progetto">
+      <img src="./assets/gf-logo.png" alt="Logo GF" class="gf-logo">
+      <p class="footer-product">Sistema Prenotazione Campi Sportivi</p>
+      <p>Versione <strong data-app-version>3.3</strong></p>
+      <p>© 2026 Gabriele Facchini</p>
+    </div>
   </footer>
 
   <script src="./js/config.js"></script>
   <script src="./js/supabase-client.js"></script>
-  <script src="./js/cliente.js?v=7"></script>
+  <script src="./js/cliente.js?v=6"></script>
+  <script src="./js/footer.js?v=1"></script>
 </body>
 </html>

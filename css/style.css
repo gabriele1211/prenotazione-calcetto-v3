@@ -251,13 +251,6 @@ th { font-size: 13px; color: var(--muted); }
   font-size: 13px;
 }
 
-footer {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px 30px;
-  color: var(--muted);
-  text-align: center;
-}
 
 @media (max-width: 720px) {
   .site-header { flex-direction: column; }
@@ -592,4 +585,48 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
 @media (max-width: 720px) {
   .municipality-suggestions { max-height: 220px; }
   .municipality-option { min-height: 48px; font-size: 16px; }
+}
+
+/* Firma GF e versione applicazione */
+.site-footer {
+  max-width: 900px;
+  margin: 10px auto 0;
+  padding: 0 20px 34px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.footer-contact {
+  margin-bottom: 22px;
+}
+
+.footer-contact p,
+.footer-signature p {
+  margin: 4px 0;
+}
+
+.footer-signature {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+
+.gf-logo {
+  display: block;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  margin: 0 auto 8px;
+  opacity: .88;
+}
+
+.footer-product {
+  color: var(--text);
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .gf-logo {
+    width: 46px;
+    height: 46px;
+  }
 }

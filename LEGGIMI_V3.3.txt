@@ -14,3 +14,9 @@ NOVITA V3.3
 - doppia conferma prima della cancellazione definitiva;
 - cancellazione manuale consentita soltanto a un gestore autenticato;
 - resta attiva la cancellazione automatica dopo 30 giorni.
+
+
+AGGIORNAMENTO FIRMA GF
+- Logo GF inserito nel footer di index.html, admin.html e privacy.html.
+- Versione applicazione letta da APP_CONFIG.APP_VERSION in js/config.js.
+- Versione attuale: 3.3.
