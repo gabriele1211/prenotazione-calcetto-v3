@@ -126,9 +126,8 @@ function resetFilters() {
   $("filtro-stato").value = "";
   $("filtro-campo").value = "";
   $("filtro-ordine").value = "recenti";
-  const today = new Date(), plus30 = new Date(); plus30.setDate(today.getDate() + 30);
-  $("filtro-da").value = today.toISOString().slice(0, 10);
-  $("filtro-a").value = plus30.toISOString().slice(0, 10);
+  $("filtro-da").value = "";
+  $("filtro-a").value = "";
   loadBookings();
 }
 
@@ -152,7 +151,6 @@ $("salva-impostazioni").addEventListener("click", saveSettings);
 ["filtro-testo", "filtro-stato", "filtro-ordine"].forEach(id => $(id).addEventListener("input", renderBookings));
 ["filtro-da", "filtro-a", "filtro-campo"].forEach(id => $(id).addEventListener("change", loadBookings));
 
-const today = new Date(), plus30 = new Date(); plus30.setDate(today.getDate() + 30);
-$("filtro-da").value = today.toISOString().slice(0, 10);
-$("filtro-a").value = plus30.toISOString().slice(0, 10);
+$("filtro-da").value = "";
+$("filtro-a").value = "";
 checkSession();

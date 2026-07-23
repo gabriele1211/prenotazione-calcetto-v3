@@ -527,3 +527,28 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
   .privacy-consent-box { padding: 14px; }
   .privacy-access-note { padding-left: 0; }
 }
+
+
+/* V3.2.4 - filtri Area Gestore */
+.admin-filters {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.6fr) repeat(5, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+  align-items: end;
+}
+.admin-filters label { margin-bottom: 0; }
+.admin-filter-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+@media (max-width: 1100px) {
+  .admin-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .filter-search { grid-column: span 3; }
+}
+@media (max-width: 720px) {
+  .admin-filters { grid-template-columns: 1fr; }
+  .filter-search { grid-column: auto; }
+}

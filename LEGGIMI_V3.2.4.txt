@@ -1,0 +1,11 @@
+VERSIONE 3.2.4
+
+Correzioni:
+- ripristinato il caricamento delle prenotazioni nell’Area Gestore;
+- aggiunti i campi Ricerca rapida, Stato e Ordine richiesti da admin.js;
+- le prenotazioni vengono mostrate tutte al primo accesso, più recenti prima;
+- i filtri data sono facoltativi;
+- pulsante Azzera ricerca;
+- nessuna modifica richiesta in Supabase.
+
+Caricare tutti i file sostituendo quelli esistenti e premere Ctrl+F5.
