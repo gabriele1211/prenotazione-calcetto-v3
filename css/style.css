@@ -476,3 +476,54 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
   .admin-filters { grid-template-columns: 1fr; }
   .centered-header { min-height: auto; }
 }
+
+
+/* V3.2.3 - correzione intestazione gestore e consenso privacy */
+.centered-header {
+  min-height: 0;
+  padding: 32px 20px 18px;
+}
+.centered-header .header-action {
+  position: static;
+}
+.header-actions-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+.privacy-consent-box {
+  margin: 18px 0;
+  padding: 16px;
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  background: #f1faf5;
+}
+.privacy-consent-title {
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
+.privacy-check {
+  margin-bottom: 8px;
+}
+.privacy-check span {
+  line-height: 1.45;
+}
+.privacy-check a {
+  color: var(--accent-dark);
+  font-weight: 800;
+}
+.privacy-access-note {
+  margin: 8px 0 0 !important;
+  padding-left: 25px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+@media (max-width: 720px) {
+  .centered-header { padding: 24px 20px 14px; }
+  .header-actions-row { margin-top: 14px; }
+  .privacy-consent-box { padding: 14px; }
+  .privacy-access-note { padding-left: 0; }
+}

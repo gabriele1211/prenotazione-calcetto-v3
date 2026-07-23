@@ -68,9 +68,9 @@
         </div>
 
         <div class="grid three">
-          <label>Numero Carta d’Identità Elettronica (CIE)
-            <input id="documento-numero" type="text" maxlength="9" pattern="[A-Za-z]{2}[0-9]{5}[A-Za-z]{2}" autocapitalize="characters" autocomplete="off" placeholder="Es. CA12345AA" required>
-            <small class="field-help">Inserisci il numero della Carta d’Identità Elettronica (CIE), nel formato indicato.</small>
+          <label>Numero carta d’identità
+            <input id="documento-numero" type="text" maxlength="9" autocapitalize="characters" autocomplete="off" placeholder="Es. CA12345AA" required>
+            <small class="field-help">Sono accettati i formati delle carte italiane elettroniche e cartacee.</small>
           </label>
           <label>Data di rilascio
             <input id="documento-data-rilascio" type="date" required>
@@ -87,10 +87,20 @@
           <textarea id="note" rows="3" maxlength="500" placeholder="Es. richiesta palloni o spogliatoio"></textarea>
         </label>
 
-        <label class="check-row">
-          <input id="privacy" type="checkbox">
-          <span>Accetto che i dati siano utilizzati per gestire la prenotazione, verificare il limite settimanale e mostrare nel planning il mio nome abbreviato.</span>
-        </label>
+        <div class="privacy-consent-box">
+          <div class="privacy-consent-title">Consenso privacy obbligatorio</div>
+          <label class="check-row privacy-check">
+            <input id="privacy" type="checkbox" required>
+            <span>
+              Ho letto l’<a href="./privacy.html" target="_blank" rel="noopener">informativa privacy</a>
+              e acconsento al trattamento dei miei dati esclusivamente per la gestione della prenotazione,
+              la verifica del limite settimanale e la visualizzazione del nome abbreviato nel planning.
+            </span>
+          </label>
+          <p class="privacy-access-note">
+            I dati completi sono consultabili soltanto dal gestore e dagli utenti autorizzati dell’Area Gestore.
+          </p>
+        </div>
 
         <button id="prenota" class="primary full" type="button">Conferma prenotazione</button>
         <div id="messaggio" class="message" aria-live="polite"></div>

@@ -1,0 +1,28 @@
+VERSIONE 3.2.2 - INSTALLAZIONE
+
+1. Carica su GitHub tutti i file e le cartelle di questo pacchetto, sostituendo quelli esistenti.
+2. Non è necessario rieseguire sql/supabase_v3.sql se la V3 è già funzionante.
+3. Dopo la pubblicazione aggiorna sia la pagina pubblica sia l’Area Gestore con Ctrl+F5.
+
+NOVITÀ V3.2.2
+- mantiene ferie, chiusure e planning della V3.2;
+- accetta esclusivamente il formato CIE: 2 lettere, 5 cifre, 2 lettere (es. CA12345AA);
+- informativa privacy dedicata in privacy.html;
+- accettazione obbligatoria dell’informativa prima della prenotazione;
+- chiarisce che i dati completi sono visibili soltanto agli utenti autorizzati dell’Area Gestore;
+- Area Gestore più larga e pulsante “Pagina pubblica” non sovrapposto al titolo;
+- prenotazioni ordinate inizialmente con le date recenti prima;
+- ricerca rapida per nome, telefono, CIE, Comune, richiesta, campo, data e orario;
+- filtri per periodo, campo e stato;
+- scelta dell’ordinamento;
+- pulsante per azzerare la ricerca.
+
+PRIVACY
+Prima della pubblicazione definitiva, controllare in privacy.html la denominazione esatta del titolare, la sede e il periodo concreto di conservazione dei dati.
+
+
+AGGIORNAMENTO V3.2.3
+- pulsante Pagina pubblica su una riga separata, senza sovrapposizioni;
+- consenso privacy evidenziato e obbligatorio;
+- link all’informativa privacy;
+- indicazione degli utenti autorizzati ad accedere ai dati completi.

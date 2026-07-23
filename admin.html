@@ -7,8 +7,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<header class="site-header centered-header"><a class="link-button header-action" href="./index.html">Pagina pubblica</a><span class="eyebrow">AREA GESTORE</span><h1>Campo Sportivo Parco Ex Velodromo (BO)</h1><p>Gestione prenotazioni e configurazione</p></header>
-<main class="page admin-page">
+<header class="site-header centered-header">
+  <span class="eyebrow">AREA GESTORE</span>
+  <h1>Campo Sportivo Parco Ex Velodromo (BO)</h1>
+  <p>Gestione prenotazioni e configurazione</p>
+  <div class="header-actions-row">
+    <a class="link-button" href="./index.html">Pagina pubblica</a>
+  </div>
+</header>
+<main class="page">
   <section id="login-box" class="panel narrow">
     <h2>Accesso gestore</h2>
     <div class="grid two"><label>Email<input id="login-email" type="email"></label><label>Password<input id="login-password" type="password"></label></div>
@@ -26,18 +33,11 @@
 
     <section class="panel">
       <div class="metrics"><div class="metric"><span>Totale</span><strong id="metrica-totale">0</strong></div><div class="metric"><span>Confermate</span><strong id="metrica-confermate">0</strong></div><div class="metric"><span>Annullate</span><strong id="metrica-annullate">0</strong></div></div>
-      <div class="admin-filters">
-        <label>Ricerca rapida<input id="filtro-testo" type="search" placeholder="Nome, telefono, CIE, Comune, richiesta..."></label>
-        <label>Dal<input id="filtro-da" type="date"></label>
-        <label>Al<input id="filtro-a" type="date"></label>
-        <label>Campo<select id="filtro-campo"></select></label>
-        <label>Stato<select id="filtro-stato"><option value="">Tutti</option><option value="confermata">Confermate</option><option value="annullata">Annullate</option></select></label>
-        <label>Ordine<select id="filtro-ordine"><option value="recenti">Date recenti prima</option><option value="vicine">Date più vicine prima</option></select></label>
-      </div>
-      <div class="admin-filter-actions"><button id="carica" class="secondary" type="button">Aggiorna elenco</button><button id="azzera-filtri" class="secondary" type="button">Azzera ricerca</button></div><p id="admin-message"></p>
+      <div class="grid three toolbar"><label>Dal<input id="filtro-da" type="date"></label><label>Al<input id="filtro-a" type="date"></label><label>Campo<select id="filtro-campo"></select></label></div>
+      <button id="carica" class="secondary" type="button">Aggiorna elenco</button><p id="admin-message"></p>
       <div class="table-wrap"><table><thead><tr><th>Data</th><th>Orario</th><th>Campo</th><th>Cliente</th><th>Contatto</th><th>Documento</th><th>Richiesta</th><th>Stato</th><th>Azione</th></tr></thead><tbody id="prenotazioni-body"></tbody></table></div>
     </section>
   </div>
 </main>
-<script src="./js/config.js"></script><script src="./js/supabase-client.js"></script><script src="./js/admin.js?v=5"></script>
+<script src="./js/config.js"></script><script src="./js/supabase-client.js"></script><script src="./js/admin.js?v=4"></script>
 </body></html>
