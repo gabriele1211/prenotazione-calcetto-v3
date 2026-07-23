@@ -1,0 +1,16 @@
+VERSIONE 3.2.6 - PRIVACY E CANCELLAZIONE AUTOMATICA
+
+1. Carica su GitHub tutti i file e le cartelle di questo pacchetto, sostituendo quelli esistenti.
+2. In Supabase apri SQL Editor.
+3. Esegui UNA SOLA VOLTA il file sql/supabase_v3_2_6_cancellazione_30_giorni.sql.
+4. Controlla in Supabase: Integrations > Cron che il job elimina-prenotazioni-dopo-30-giorni sia attivo.
+5. Aggiorna il sito con Ctrl+F5.
+
+NOVITÀ
+- titolare privacy: Cooperativa Sociale ORIONE 2000;
+- sede: Via Bainsizza n. 18, 40133 Bologna;
+- conservazione dei dati per 30 giorni dopo la data di utilizzo del campo;
+- cancellazione automatica giornaliera delle prenotazioni più vecchie di 30 giorni.
+
+IMPORTANTE
+La cancellazione usa la data della prenotazione, non la data di inserimento. Le prenotazioni future non vengono quindi eliminate, anche quando sono state registrate con molto anticipo.

@@ -106,3 +106,38 @@ grant execute on function public.crea_prenotazione_v3(uuid,text,text,text,date,t
 
 -- L'area gestore deve poter leggere e aggiornare le prenotazioni.
 grant select, update on public.prenotazioni to authenticated;
+
+-- V3.2.6: cancellazione automatica delle prenotazioni trascorsi 30 giorni dalla data di utilizzo.
+create extension if not exists pg_cron with schema extensions;
+
+create or replace function public.elimina_prenotazioni_scadute_30_giorni()
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_eliminate integer;
+begin
+  delete from public.prenotazioni where data < (current_date - 30);
+  get diagnostics v_eliminate = row_count;
+  return v_eliminate;
+end;
+$$;
+
+revoke all on function public.elimina_prenotazioni_scadute_30_giorni() from public;
+grant execute on function public.elimina_prenotazioni_scadute_30_giorni() to postgres, service_role;
+
+do $$
+declare v_job_id bigint;
+begin
+  select jobid into v_job_id from cron.job
+  where jobname = 'elimina-prenotazioni-dopo-30-giorni' limit 1;
+  if v_job_id is not null then perform cron.unschedule(v_job_id); end if;
+end $$;
+
+select cron.schedule(
+  'elimina-prenotazioni-dopo-30-giorni',
+  '15 3 * * *',
+  $$select public.elimina_prenotazioni_scadute_30_giorni();$$
+);
