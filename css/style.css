@@ -634,3 +634,20 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
     max-height: 46px !important;
   }
 }
+
+
+/* V3.3.1 - footer Area Gestore centrato rispetto alla finestra */
+.admin-site-footer {
+  width: 100%;
+  max-width: none;
+  margin: 10px 0 0;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.admin-site-footer .footer-signature {
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
