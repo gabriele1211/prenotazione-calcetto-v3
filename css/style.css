@@ -438,3 +438,16 @@ table { min-width: 1250px; }
     margin-bottom: 16px;
   }
 }
+
+
+/* V3.2 - verifica dati documento */
+.field-help {
+  display: block;
+  margin-top: 1px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+.field-help.field-error { color: var(--danger); font-weight: 700; }
+input:invalid:not(:placeholder-shown) { border-color: #d98b84; }

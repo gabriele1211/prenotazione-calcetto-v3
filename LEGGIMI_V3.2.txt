@@ -1,0 +1,20 @@
+VERSIONE 3.2 - INSTALLAZIONE
+
+1. Carica su GitHub tutti i file e le cartelle di questo pacchetto, sostituendo quelli esistenti.
+2. Non è necessario rieseguire supabase_v3.sql se la V3 è già funzionante.
+3. Dopo la pubblicazione aggiorna la pagina con Ctrl+F5.
+
+NOVITÀ V3.2
+- mantiene blocco ferie, planning e Area Gestore della V3;
+- numero carta d’identità trasformato automaticamente in maiuscolo;
+- controllo dei formati italiani plausibili (CIE moderna e carta cartacea);
+- data di rilascio non futura;
+- Comune di rilascio selezionabile dall’elenco dei Comuni italiani;
+- il Comune deve corrispondere esattamente a una voce dell’elenco;
+- elenco memorizzato nel browser dopo il primo caricamento.
+
+IMPORTANTE
+Questi controlli impediscono dati palesemente errati, ma non certificano che il documento esista o appartenga realmente alla persona. Una verifica certa richiederebbe identificazione tramite SPID/CIE o controllo manuale del documento.
+
+FONTE ELENCO COMUNI
+Il sito carica il dataset JSON pubblico del progetto Comuni-Italia da GitHub. Per questo il primo caricamento richiede la connessione a Internet.

@@ -13,6 +13,64 @@ let bookingsEnabled = true;
 let closureStart = null;
 let closureEnd = null;
 let closureMessage = "";
+let italianMunicipalities = new Map();
+let municipalitiesReady = false;
+
+function normalizeSearchText(value) {
+  return String(value || "").trim().replace(/\s+/g, " ").toLocaleUpperCase("it-IT");
+}
+
+function extractMunicipalityNames(payload) {
+  const names = [];
+  const visit = (value) => {
+    if (Array.isArray(value)) return value.forEach(visit);
+    if (!value || typeof value !== "object") return;
+    const candidate = value.nome ?? value.comune ?? value.denominazione ?? value.name;
+    if (typeof candidate === "string" && candidate.trim().length > 1) names.push(candidate.trim());
+    Object.values(value).forEach(child => {
+      if (child && typeof child === "object") visit(child);
+    });
+  };
+  visit(payload);
+  return [...new Set(names)].sort((a, b) => a.localeCompare(b, "it"));
+}
+
+async function loadItalianMunicipalities() {
+  const status = $("comuni-status");
+  const datalist = $("comuni-italiani");
+  try {
+    const cached = localStorage.getItem("v32-comuni-italiani");
+    let names = cached ? JSON.parse(cached) : null;
+    if (!Array.isArray(names) || names.length < 7000) {
+      const response = await fetch("https://raw.githubusercontent.com/AndreaGrandieri/Comuni-Italia/main/comuni.json", { cache: "force-cache" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      names = extractMunicipalityNames(await response.json());
+      if (names.length < 7000) throw new Error("Elenco Comuni incompleto");
+      try { localStorage.setItem("v32-comuni-italiani", JSON.stringify(names)); } catch (_) {}
+    }
+    italianMunicipalities = new Map(names.map(name => [normalizeSearchText(name), name]));
+    datalist.innerHTML = names.map(name => `<option value="${name.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}"></option>`).join("");
+    municipalitiesReady = true;
+    status.textContent = "Seleziona un Comune presente nell’elenco.";
+    status.classList.remove("field-error");
+  } catch (error) {
+    municipalitiesReady = false;
+    status.textContent = "Elenco Comuni non disponibile: aggiorna la pagina prima di prenotare.";
+    status.classList.add("field-error");
+  }
+}
+
+function validateIdentityCardNumber(value) {
+  const normalized = normalizeDocument(value);
+  // CIE moderna: 2 lettere + 5 cifre + 2 lettere. Carta cartacea: 2 lettere + 7 cifre.
+  return /^(?:[A-Z]{2}\d{5}[A-Z]{2}|[A-Z]{2}\d{7})$/.test(normalized);
+}
+
+function validateMunicipality(value) {
+  if (!municipalitiesReady) return false;
+  return italianMunicipalities.has(normalizeSearchText(value));
+}
+
 
 function localTodayIso() {
   const now = new Date();
@@ -176,12 +234,17 @@ async function createBooking() {
   const telefono = $("telefono").value.trim();
   const documentoNumero = normalizeDocument($("documento-numero").value);
   const documentoData = $("documento-data-rilascio").value;
-  const documentoRilasciatoDa = $("documento-rilasciato-da").value.trim();
+  let documentoRilasciatoDa = $("documento-rilasciato-da").value.trim();
   const fieldId = campoSelect.value;
   const bookingDate = dataInput.value;
 
   if (!bookingDate || !fieldId || !selectedStart) return showMessage("Seleziona data, campo e orario.", "warning");
   if (!nomeCliente || !telefono || !documentoNumero || !documentoData || !documentoRilasciatoDa) return showMessage("Compila tutti i dati obbligatori, compresi quelli della carta d’identità.", "warning");
+  if (!validateIdentityCardNumber(documentoNumero)) return showMessage("Il numero della carta d’identità non ha un formato italiano valido. Esempio: CA12345AA.", "error");
+  if (documentoData > localTodayIso()) return showMessage("La data di rilascio della carta d’identità non può essere futura.", "error");
+  if (!municipalitiesReady) return showMessage("L’elenco dei Comuni non è stato caricato. Aggiorna la pagina e riprova.", "error");
+  if (!validateMunicipality(documentoRilasciatoDa)) return showMessage("Seleziona un Comune reale dall’elenco proposto.", "error");
+  documentoRilasciatoDa = italianMunicipalities.get(normalizeSearchText(documentoRilasciatoDa));
   if (!$("privacy").checked) return showMessage("Devi accettare l’uso dei dati per la prenotazione.", "warning");
 
   const fieldName = fields.find(c => String(c.id) === String(fieldId))?.nome || "Campo";
@@ -217,6 +280,8 @@ async function createBooking() {
 }
 
 dataInput.min = localTodayIso(); dataInput.value = localTodayIso();
+$("documento-data-rilascio").max = localTodayIso();
+$("documento-numero").addEventListener("input", event => { event.target.value = normalizeDocument(event.target.value).slice(0, 9); });
 dataInput.addEventListener("change", loadSlots); campoSelect.addEventListener("change", loadSlots);
 $("aggiorna").addEventListener("click", loadSlots); prenotaButton.addEventListener("click", createBooking);
-(async () => { await loadBookingStatus(); await loadFields(); })();
+(async () => { await Promise.all([loadBookingStatus(), loadItalianMunicipalities()]); await loadFields(); })();

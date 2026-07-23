@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Campo Sportivo Parco Ex Velodromo (BO)</title>
-  <link rel="stylesheet" href="./css/style.css?v=5">
+  <link rel="stylesheet" href="./css/style.css?v=6">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -68,9 +68,19 @@
         </div>
 
         <div class="grid three">
-          <label>Numero carta d’identità<input id="documento-numero" type="text" maxlength="30" autocapitalize="characters" required></label>
-          <label>Data di rilascio<input id="documento-data-rilascio" type="date" required></label>
-          <label>Comune/autorità di rilascio<input id="documento-rilasciato-da" type="text" maxlength="100" required></label>
+          <label>Numero carta d’identità
+            <input id="documento-numero" type="text" maxlength="9" autocapitalize="characters" autocomplete="off" placeholder="Es. CA12345AA" required>
+            <small class="field-help">Sono accettati i formati delle carte italiane elettroniche e cartacee.</small>
+          </label>
+          <label>Data di rilascio
+            <input id="documento-data-rilascio" type="date" required>
+            <small class="field-help">Non può essere successiva alla data odierna.</small>
+          </label>
+          <label>Comune di rilascio
+            <input id="documento-rilasciato-da" type="text" maxlength="100" list="comuni-italiani" autocomplete="off" placeholder="Inizia a scrivere il Comune" required>
+            <datalist id="comuni-italiani"></datalist>
+            <small id="comuni-status" class="field-help">Caricamento elenco ufficiale dei Comuni…</small>
+          </label>
         </div>
 
         <label>Richiesta facoltativa
@@ -94,6 +104,6 @@
 
   <script src="./js/config.js"></script>
   <script src="./js/supabase-client.js"></script>
-  <script src="./js/cliente.js?v=4"></script>
+  <script src="./js/cliente.js?v=5"></script>
 </body>
 </html>
