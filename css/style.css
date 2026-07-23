@@ -345,3 +345,56 @@ footer {
 .message a { color: inherit; }
 table { min-width: 1250px; }
 @media (max-width: 720px) { .grid.three { grid-template-columns: 1fr; } }
+
+
+/* V3 - intestazione pubblica centrata */
+.public-header {
+  position: relative;
+  display: block;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 140px 18px;
+  text-align: center;
+}
+
+.public-header > div {
+  width: 100%;
+}
+
+.public-header .eyebrow {
+  display: block;
+  text-align: center;
+  letter-spacing: .14em;
+}
+
+.public-header h1 {
+  margin: 8px 0;
+  font-size: clamp(1.8rem, 3vw, 2.45rem);
+  line-height: 1.15;
+}
+
+.public-header p {
+  margin: 0;
+  text-align: center;
+}
+
+.public-header .link-button {
+  position: absolute;
+  top: 28px;
+  right: 20px;
+}
+
+@media (max-width: 720px) {
+  .public-header {
+    padding: 24px 20px 14px;
+  }
+
+  .public-header .link-button {
+    position: static;
+    margin-top: 16px;
+  }
+}
+
+.centered-header{position:relative;text-align:center;margin-bottom:24px;}
+.header-action{position:absolute;right:0;top:8px;}
+@media(max-width:768px){.header-action{position:static;display:inline-block;margin-bottom:16px;}}

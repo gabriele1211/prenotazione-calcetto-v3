@@ -10,6 +10,9 @@ let selectedStart = null;
 let selectedEnd = null;
 let fields = [];
 let bookingsEnabled = true;
+let closureStart = null;
+let closureEnd = null;
+let closureMessage = "";
 
 function localTodayIso() {
   const now = new Date();
@@ -41,20 +44,43 @@ function normalizeDocument(value) {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
+function isDateClosed(isoDate) {
+  return Boolean(isoDate && closureStart && closureEnd && isoDate >= closureStart && isoDate <= closureEnd);
+}
+
+function updateClosureNotice(isoDate) {
+  const closureBox = $("chiusura-box");
+  const closureText = $("chiusura-messaggio");
+
+  if (!bookingsEnabled) {
+    closureBox.classList.remove("hidden");
+    closureText.textContent = closureMessage || "Il servizio di prenotazione è temporaneamente sospeso.";
+    prenotaButton.disabled = true;
+    return true;
+  }
+
+  if (isDateClosed(isoDate)) {
+    closureBox.classList.remove("hidden");
+    closureText.textContent = closureMessage || `Il campo è chiuso dal ${closureStart} al ${closureEnd}.`;
+    prenotaButton.disabled = true;
+    return true;
+  }
+
+  closureBox.classList.add("hidden");
+  closureText.textContent = "";
+  prenotaButton.disabled = false;
+  return false;
+}
+
 async function loadBookingStatus() {
   const { data, error } = await db.from("impostazioni_prenotazioni").select("prenotazioni_attive,chiusura_dal,chiusura_al,messaggio_chiusura").eq("id", 1).maybeSingle();
   if (error || !data) return;
 
-  const today = localTodayIso();
-  const insideClosure = data.chiusura_dal && data.chiusura_al && today >= data.chiusura_dal && today <= data.chiusura_al;
-  bookingsEnabled = Boolean(data.prenotazioni_attive) && !insideClosure;
-
-  if (!bookingsEnabled) {
-    $("chiusura-box").classList.remove("hidden");
-    $("chiusura-messaggio").textContent = data.messaggio_chiusura || "Il servizio di prenotazione è temporaneamente sospeso.";
-    $("booking-area").classList.add("disabled-area");
-    prenotaButton.disabled = true;
-  }
+  bookingsEnabled = Boolean(data.prenotazioni_attive);
+  closureStart = data.chiusura_dal || null;
+  closureEnd = data.chiusura_al || null;
+  closureMessage = data.messaggio_chiusura || "";
+  updateClosureNotice(dataInput.value);
 }
 
 async function loadFields() {
@@ -73,6 +99,27 @@ async function loadSlots() {
   const bookingDate = dataInput.value;
   const fieldId = campoSelect.value;
   if (!bookingDate || !fieldId) return;
+
+  const dateUnavailable = updateClosureNotice(bookingDate);
+  if (dateUnavailable) {
+    const start = APP_CONFIG.OPENING_HOUR * 60;
+    const end = APP_CONFIG.CLOSING_HOUR * 60;
+    const duration = APP_CONFIG.DEFAULT_FIELD_DURATION_MINUTES;
+    slotsBox.innerHTML = "";
+    for (let min = start; min + duration <= end; min += duration) {
+      const slotStart = minutesToTime(min);
+      const slotEnd = minutesToTime(min + duration);
+      const paid = min >= APP_CONFIG.PAID_FROM_HOUR * 60;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.disabled = true;
+      button.className = `slot past ${paid ? "paid-slot" : "free-slot"}`;
+      button.innerHTML = `<span class="slot-time">${slotStart}–${slotEnd}</span><span class="slot-price">${paid ? "A pagamento" : "Gratuito"}</span><span class="slot-status">Non disponibile</span>`;
+      slotsBox.appendChild(button);
+    }
+    selectedText.textContent = "Data non disponibile per chiusura.";
+    return;
+  }
 
   const { data: planning, error } = await db.rpc("get_daily_planning", { p_campo_id: fieldId, p_data: bookingDate });
   if (error) {
@@ -105,7 +152,7 @@ async function loadSlots() {
       const status = document.createElement("span"); status.className = "slot-status"; status.textContent = "Prenotato";
       const customer = document.createElement("span"); customer.className = "slot-customer"; customer.textContent = booking.nome_pubblico || "Occupato";
       button.append(status, customer);
-    } else if (isPast || !bookingsEnabled) {
+    } else if (isPast || !bookingsEnabled || isDateClosed(bookingDate)) {
       button.classList.add("past"); button.disabled = true;
       const status = document.createElement("span"); status.className = "slot-status"; status.textContent = "Non disponibile"; button.appendChild(status);
     } else {
@@ -123,6 +170,7 @@ async function loadSlots() {
 async function createBooking() {
   clearMessage();
   if (!bookingsEnabled) return showMessage("Le prenotazioni sono temporaneamente sospese.", "warning");
+  if (isDateClosed(dataInput.value)) return showMessage(closureMessage || "La data selezionata non è disponibile per chiusura.", "warning");
 
   const nomeCliente = $("nome").value.trim();
   const telefono = $("telefono").value.trim();
