@@ -1,0 +1,19 @@
+VERSIONE 3 - INSTALLAZIONE
+
+1. Apri Supabase > SQL Editor.
+2. Incolla ed esegui tutto il contenuto di supabase_v3.sql.
+3. Carica su GitHub tutti i file e le cartelle di questo pacchetto, sostituendo quelli esistenti.
+4. Verifica prima una prenotazione di prova e poi l'accesso all'area gestore.
+
+Funzioni incluse:
+- titolo Campo Sportivo Parco Ex Velodromo (BO)
+- orari 09:00-22:00, intervalli di un'ora
+- gratuito 09:00-19:00; a pagamento 19:00-22:00
+- numero, data e autorità di rilascio della carta d'identità
+- massimo due prenotazioni nella settimana (lunedì-domenica) per documento
+- conferma con invito allo screenshot
+- telefono 328 673 9425 per modifiche e annullamenti
+- richieste facoltative evidenziate in giallo nell'area gestore
+- sospensione delle prenotazioni e periodo di chiusura dall'area gestore
+
+NOTA: se lo script SQL segnala che campo_id non è UUID, occorre sostituire "uuid" nella funzione con il tipo effettivo della colonna prenotazioni.campo_id.

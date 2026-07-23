@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Area gestore - Parco Ex Velodromo</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header class="site-header"><div><span class="eyebrow">Area riservata</span><h1>Gestione prenotazioni</h1><p>Campo Sportivo Parco Ex Velodromo (BO)</p></div><a class="link-button" href="./index.html">Pagina pubblica</a></header>
+<main class="page">
+  <section id="login-box" class="panel narrow">
+    <h2>Accesso gestore</h2>
+    <div class="grid two"><label>Email<input id="login-email" type="email"></label><label>Password<input id="login-password" type="password"></label></div>
+    <button id="login" class="primary" type="button">Accedi</button><div id="login-message" class="message"></div>
+  </section>
+
+  <div id="dashboard" class="hidden">
+    <section class="panel closure-admin">
+      <div class="slots-header"><div><h2>Stato prenotazioni</h2><p>Puoi sospendere il servizio per un periodo di chiusura.</p></div><button id="logout" class="secondary" type="button">Esci</button></div>
+      <label class="check-row"><input id="prenotazioni-attive" type="checkbox"><span>Prenotazioni attive</span></label>
+      <div class="grid two"><label>Chiusura dal<input id="chiusura-dal" type="date"></label><label>Chiusura al<input id="chiusura-al" type="date"></label></div>
+      <label>Messaggio di chiusura<textarea id="messaggio-chiusura" rows="2" maxlength="300"></textarea></label>
+      <button id="salva-impostazioni" class="primary" type="button">Salva impostazioni</button><div id="settings-message" class="message"></div>
+    </section>
+
+    <section class="panel">
+      <div class="metrics"><div class="metric"><span>Totale</span><strong id="metrica-totale">0</strong></div><div class="metric"><span>Confermate</span><strong id="metrica-confermate">0</strong></div><div class="metric"><span>Annullate</span><strong id="metrica-annullate">0</strong></div></div>
+      <div class="grid three toolbar"><label>Dal<input id="filtro-da" type="date"></label><label>Al<input id="filtro-a" type="date"></label><label>Campo<select id="filtro-campo"></select></label></div>
+      <button id="carica" class="secondary" type="button">Aggiorna elenco</button><p id="admin-message"></p>
+      <div class="table-wrap"><table><thead><tr><th>Data</th><th>Orario</th><th>Campo</th><th>Cliente</th><th>Contatto</th><th>Documento</th><th>Richiesta</th><th>Stato</th><th>Azione</th></tr></thead><tbody id="prenotazioni-body"></tbody></table></div>
+    </section>
+  </div>
+</main>
+<script src="./js/config.js"></script><script src="./js/supabase-client.js"></script><script src="./js/admin.js?v=3"></script>
+</body></html>

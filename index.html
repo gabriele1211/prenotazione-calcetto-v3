@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Campo Sportivo Parco Ex Velodromo (BO)</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <span class="eyebrow">Prenotazioni online</span>
+      <h1>Campo Sportivo Parco Ex Velodromo (BO)</h1>
+      <p>Scegli giorno e orario. La prenotazione viene confermata subito.</p>
+    </div>
+    <a class="link-button" href="./admin.html">Area gestore</a>
+  </header>
+
+  <main class="page">
+    <section id="chiusura-box" class="panel closure-panel hidden" aria-live="polite">
+      <h2>Prenotazioni temporaneamente sospese</h2>
+      <p id="chiusura-messaggio"></p>
+    </section>
+
+    <section class="panel info-panel">
+      <h2>Orari e costi</h2>
+      <p><strong>09:00–19:00:</strong> utilizzo gratuito.</p>
+      <p><strong>19:00–22:00:</strong> utilizzo a pagamento.</p>
+      <p>Ogni prenotazione dura un’ora. Sono consentite al massimo due prenotazioni nella stessa settimana per ogni carta d’identità.</p>
+    </section>
+
+    <div id="booking-area">
+      <section class="panel">
+        <div class="step-title">
+          <span class="step-number">1</span>
+          <div>
+            <h2>Scegli data e campo</h2>
+            <p>Gli orari già occupati vengono disabilitati automaticamente.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label>Data<input id="data" type="date" required></label>
+          <label>Campo<select id="campo" required></select></label>
+        </div>
+
+        <div class="slots-header">
+          <h3>Planning del giorno</h3>
+          <button id="aggiorna" class="secondary" type="button">Aggiorna</button>
+        </div>
+        <div id="slots" class="slots" aria-live="polite"></div>
+        <p id="slot-selezionato" class="selected-slot">Nessun orario selezionato.</p>
+      </section>
+
+      <section class="panel">
+        <div class="step-title">
+          <span class="step-number">2</span>
+          <div>
+            <h2>I tuoi dati</h2>
+            <p>Dopo la conferma, l’orario risulterà subito occupato nel planning.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <label>Nome e cognome<input id="nome" type="text" maxlength="100" autocomplete="name" required></label>
+          <label>Telefono<input id="telefono" type="tel" maxlength="30" autocomplete="tel" required></label>
+        </div>
+
+        <div class="grid three">
+          <label>Numero carta d’identità<input id="documento-numero" type="text" maxlength="30" autocapitalize="characters" required></label>
+          <label>Data di rilascio<input id="documento-data-rilascio" type="date" required></label>
+          <label>Comune/autorità di rilascio<input id="documento-rilasciato-da" type="text" maxlength="100" required></label>
+        </div>
+
+        <label>Richiesta facoltativa
+          <textarea id="note" rows="3" maxlength="500" placeholder="Es. richiesta palloni o spogliatoio"></textarea>
+        </label>
+
+        <label class="check-row">
+          <input id="privacy" type="checkbox">
+          <span>Accetto che i dati siano utilizzati per gestire la prenotazione, verificare il limite settimanale e mostrare nel planning il mio nome abbreviato.</span>
+        </label>
+
+        <button id="prenota" class="primary full" type="button">Conferma prenotazione</button>
+        <div id="messaggio" class="message" aria-live="polite"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>Per modificare o annullare una prenotazione telefona al <a href="tel:+393286739425"><strong>328 673 9425</strong></a>.</p>
+  </footer>
+
+  <script src="./js/config.js"></script>
+  <script src="./js/supabase-client.js"></script>
+  <script src="./js/cliente.js?v=3"></script>
+</body>
+</html>
