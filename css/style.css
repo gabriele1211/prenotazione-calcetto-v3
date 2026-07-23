@@ -552,3 +552,44 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
   .admin-filters { grid-template-columns: 1fr; }
   .filter-search { grid-column: auto; }
 }
+
+
+/* V3.3 - autocomplete Comuni mobile e cancellazione manuale */
+.municipality-field { position: relative; }
+.municipality-suggestions {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% - 20px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #b9c6cf;
+  border-radius: 11px;
+  background: white;
+  box-shadow: 0 14px 30px rgba(25, 40, 55, .18);
+}
+.municipality-option {
+  display: block;
+  width: 100%;
+  padding: 13px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: white;
+  color: var(--text);
+  text-align: left;
+  font-weight: 600;
+}
+.municipality-option:last-child { border-bottom: 0; }
+.municipality-option:hover,
+.municipality-option:focus { background: #edf8f2; outline: none; }
+.municipality-empty { padding: 13px 14px; color: var(--muted); font-weight: 400; }
+.row-actions { display: flex; flex-direction: column; gap: 7px; align-items: stretch; }
+.delete-booking { border-color: var(--danger); color: var(--danger); }
+.delete-booking:hover { background: var(--error-bg); }
+@media (max-width: 720px) {
+  .municipality-suggestions { max-height: 220px; }
+  .municipality-option { min-height: 48px; font-size: 16px; }
+}

@@ -14,7 +14,9 @@ let closureStart = null;
 let closureEnd = null;
 let closureMessage = "";
 let italianMunicipalities = new Map();
+let italianMunicipalityNames = [];
 let municipalitiesReady = false;
+let municipalitySelectionConfirmed = false;
 
 function normalizeSearchText(value) {
   return String(value || "").trim().replace(/\s+/g, " ").toLocaleUpperCase("it-IT");
@@ -37,7 +39,6 @@ function extractMunicipalityNames(payload) {
 
 async function loadItalianMunicipalities() {
   const status = $("comuni-status");
-  const datalist = $("comuni-italiani");
   try {
     const cached = localStorage.getItem("v32-comuni-italiani");
     let names = cached ? JSON.parse(cached) : null;
@@ -48,8 +49,8 @@ async function loadItalianMunicipalities() {
       if (names.length < 7000) throw new Error("Elenco Comuni incompleto");
       try { localStorage.setItem("v32-comuni-italiani", JSON.stringify(names)); } catch (_) {}
     }
+    italianMunicipalityNames = names;
     italianMunicipalities = new Map(names.map(name => [normalizeSearchText(name), name]));
-    datalist.innerHTML = names.map(name => `<option value="${name.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}"></option>`).join("");
     municipalitiesReady = true;
     status.textContent = "Seleziona un Comune presente nell’elenco.";
     status.classList.remove("field-error");
@@ -60,6 +61,65 @@ async function loadItalianMunicipalities() {
   }
 }
 
+
+function closeMunicipalitySuggestions() {
+  const box = $("comuni-suggerimenti");
+  const input = $("documento-rilasciato-da");
+  box.classList.add("hidden");
+  box.innerHTML = "";
+  input.setAttribute("aria-expanded", "false");
+}
+
+function selectMunicipality(name) {
+  const input = $("documento-rilasciato-da");
+  input.value = name;
+  municipalitySelectionConfirmed = true;
+  closeMunicipalitySuggestions();
+  $("comuni-status").textContent = `Comune selezionato: ${name}`;
+  $("comuni-status").classList.remove("field-error");
+}
+
+function updateMunicipalitySuggestions() {
+  const input = $("documento-rilasciato-da");
+  const box = $("comuni-suggerimenti");
+  const query = normalizeSearchText(input.value);
+  municipalitySelectionConfirmed = italianMunicipalities.has(query);
+
+  if (!municipalitiesReady || query.length < 2) {
+    closeMunicipalitySuggestions();
+    return;
+  }
+
+  const starts = [];
+  const contains = [];
+  for (const name of italianMunicipalityNames) {
+    const normalized = normalizeSearchText(name);
+    if (normalized.startsWith(query)) starts.push(name);
+    else if (normalized.includes(query)) contains.push(name);
+    if (starts.length + contains.length >= 12) break;
+  }
+  const matches = [...starts, ...contains].slice(0, 12);
+  if (!matches.length) {
+    box.innerHTML = '<div class="municipality-empty">Nessun Comune trovato.</div>';
+  } else {
+    box.innerHTML = "";
+    matches.forEach(name => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "municipality-option";
+      button.setAttribute("role", "option");
+      button.textContent = name;
+      button.addEventListener("pointerdown", event => {
+        event.preventDefault();
+        selectMunicipality(name);
+      });
+      box.appendChild(button);
+    });
+  }
+  box.classList.remove("hidden");
+  input.setAttribute("aria-expanded", "true");
+}
+
 function validateIdentityCardNumber(value) {
   const normalized = normalizeDocument(value);
   // Carta d’Identità Elettronica (CIE): 2 lettere + 5 cifre + 2 lettere.
@@ -68,7 +128,7 @@ function validateIdentityCardNumber(value) {
 
 function validateMunicipality(value) {
   if (!municipalitiesReady) return false;
-  return italianMunicipalities.has(normalizeSearchText(value));
+  return municipalitySelectionConfirmed && italianMunicipalities.has(normalizeSearchText(value));
 }
 
 
@@ -274,6 +334,8 @@ async function createBooking() {
 
   const confirmedStart = selectedStart, confirmedEnd = selectedEnd;
   ["nome","telefono","documento-numero","documento-data-rilascio","documento-rilasciato-da","note"].forEach(id => $(id).value = "");
+  municipalitySelectionConfirmed = false;
+  closeMunicipalitySuggestions();
   $("privacy").checked = false;
   await loadSlots();
   showMessage(`<strong>✅ Prenotazione confermata</strong><br>${fieldName}, ${formatDateItalian(bookingDate)}, ${confirmedStart}–${confirmedEnd}.<br><br><strong>📷 Fai uno screenshot di questa schermata</strong> per ricordarti dell’appuntamento.<br><br>Per modificare o annullare telefona al <a href="tel:${APP_CONFIG.CONTACT_PHONE_LINK}"><strong>${APP_CONFIG.CONTACT_PHONE_DISPLAY}</strong></a>.`, "success", true);
@@ -284,4 +346,12 @@ $("documento-data-rilascio").max = localTodayIso();
 $("documento-numero").addEventListener("input", event => { event.target.value = normalizeDocument(event.target.value).slice(0, 9); });
 dataInput.addEventListener("change", loadSlots); campoSelect.addEventListener("change", loadSlots);
 $("aggiorna").addEventListener("click", loadSlots); prenotaButton.addEventListener("click", createBooking);
+$("documento-rilasciato-da").addEventListener("input", () => {
+  municipalitySelectionConfirmed = false;
+  updateMunicipalitySuggestions();
+});
+$("documento-rilasciato-da").addEventListener("focus", updateMunicipalitySuggestions);
+document.addEventListener("pointerdown", event => {
+  if (!event.target.closest(".municipality-field")) closeMunicipalitySuggestions();
+});
 (async () => { await Promise.all([loadBookingStatus(), loadItalianMunicipalities()]); await loadFields(); })();

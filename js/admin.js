@@ -94,16 +94,53 @@ function renderBookings() {
     const statusBadge = document.createElement("span"); statusBadge.className = `status ${item.stato}`; statusBadge.textContent = item.stato;
     statusTd.appendChild(statusBadge); tr.appendChild(statusTd);
     const actionTd = document.createElement("td");
-    const button = document.createElement("button");
-    button.className = "mini-button"; button.type = "button"; button.dataset.id = item.id;
-    button.dataset.status = item.stato === "annullata" ? "confermata" : "annullata";
-    button.textContent = item.stato === "annullata" ? "Ripristina" : "Annulla";
-    actionTd.appendChild(button); tr.appendChild(actionTd); body.appendChild(tr);
+    const actionBox = document.createElement("div");
+    actionBox.className = "row-actions";
+
+    const statusButton = document.createElement("button");
+    statusButton.className = "mini-button";
+    statusButton.type = "button";
+    statusButton.dataset.action = "status";
+    statusButton.dataset.id = item.id;
+    statusButton.dataset.status = item.stato === "annullata" ? "confermata" : "annullata";
+    statusButton.textContent = item.stato === "annullata" ? "Ripristina" : "Annulla";
+
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "mini-button delete-booking";
+    deleteButton.type = "button";
+    deleteButton.dataset.action = "delete";
+    deleteButton.dataset.id = item.id;
+    deleteButton.dataset.customer = item.nome_cliente || "cliente";
+    deleteButton.dataset.booking = `${localDate(item.data)} ${cleanTime(item.ora_inizio)}`;
+    deleteButton.textContent = "Elimina";
+
+    actionBox.append(statusButton, deleteButton);
+    actionTd.appendChild(actionBox);
+    tr.appendChild(actionTd);
+    body.appendChild(tr);
   });
 
-  body.querySelectorAll("button[data-id]").forEach(button => button.addEventListener("click", async () => {
+  body.querySelectorAll('button[data-action="status"]').forEach(button => button.addEventListener("click", async () => {
     const { error } = await db.from("prenotazioni").update({ stato: button.dataset.status }).eq("id", button.dataset.id);
     if (error) return alert("Aggiornamento non riuscito: " + error.message);
+    await loadBookings();
+  }));
+
+  body.querySelectorAll('button[data-action="delete"]').forEach(button => button.addEventListener("click", async () => {
+    const firstConfirm = confirm(`Eliminare definitivamente la prenotazione di ${button.dataset.customer} del ${button.dataset.booking}?`);
+    if (!firstConfirm) return;
+    const secondConfirm = confirm("Conferma finale: tutti i dati personali della prenotazione saranno cancellati e non potranno essere recuperati.");
+    if (!secondConfirm) return;
+
+    button.disabled = true;
+    button.textContent = "Eliminazione…";
+    const { data, error } = await db.rpc("elimina_prenotazione_gestore", { p_prenotazione_id: button.dataset.id });
+    if (error) {
+      button.disabled = false;
+      button.textContent = "Elimina";
+      return alert("Eliminazione non riuscita: " + error.message);
+    }
+    if (!data) alert("La prenotazione era già stata eliminata o non è stata trovata.");
     await loadBookings();
   }));
 }

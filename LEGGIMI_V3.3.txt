@@ -1,0 +1,16 @@
+VERSIONE 3.3 - INSTALLAZIONE
+
+1. Carica su GitHub tutti i file e le cartelle del pacchetto, sostituendo quelli esistenti.
+2. In Supabase apri SQL Editor e incolla il contenuto di:
+   sql/supabase_v3_3_cancellazione_manuale.sql
+3. Premi Run una sola volta.
+4. Aggiorna pagina pubblica e Area Gestore con Ctrl+F5.
+
+NOVITA V3.3
+- elenco Comuni personalizzato e compatibile con smartphone;
+- digitare almeno 2 lettere e toccare il Comune proposto;
+- il Comune deve essere selezionato dall’elenco;
+- pulsante Elimina nell’Area Gestore;
+- doppia conferma prima della cancellazione definitiva;
+- cancellazione manuale consentita soltanto a un gestore autenticato;
+- resta attiva la cancellazione automatica dopo 30 giorni.

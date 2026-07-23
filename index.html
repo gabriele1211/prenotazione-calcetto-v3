@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Campo Sportivo Parco Ex Velodromo (BO)</title>
-  <link rel="stylesheet" href="./css/style.css?v=8">
+  <link rel="stylesheet" href="./css/style.css?v=9">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -76,9 +76,9 @@
             <input id="documento-data-rilascio" type="date" required>
             <small class="field-help">Non può essere successiva alla data odierna.</small>
           </label>
-          <label>Comune di rilascio
-            <input id="documento-rilasciato-da" type="text" maxlength="100" list="comuni-italiani" autocomplete="off" placeholder="Inizia a scrivere il Comune" required>
-            <datalist id="comuni-italiani"></datalist>
+          <label class="municipality-field">Comune di rilascio
+            <input id="documento-rilasciato-da" type="text" maxlength="100" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Inizia a scrivere il Comune" required aria-autocomplete="list" aria-controls="comuni-suggerimenti" aria-expanded="false">
+            <div id="comuni-suggerimenti" class="municipality-suggestions hidden" role="listbox"></div>
             <small id="comuni-status" class="field-help">Caricamento elenco ufficiale dei Comuni…</small>
           </label>
         </div>
@@ -114,6 +114,6 @@
 
   <script src="./js/config.js"></script>
   <script src="./js/supabase-client.js"></script>
-  <script src="./js/cliente.js?v=6"></script>
+  <script src="./js/cliente.js?v=7"></script>
 </body>
 </html>
