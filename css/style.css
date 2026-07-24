@@ -612,10 +612,8 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
 
 .gf-logo {
   display: block;
-  width: 110px !important;
-  max-width: 110px !important;
-  height: 110px !important;
-  max-height: 110px !important;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
   margin: 0 auto 8px;
   opacity: .88;
@@ -628,81 +626,7 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
 
 @media (max-width: 720px) {
   .gf-logo {
-    width: 46px !important;
-    max-width: 46px !important;
-    height: 46px !important;
-    max-height: 46px !important;
+    width: 46px;
+    height: 46px;
   }
 }
-
-
-/* V3.3.1 - footer Area Gestore centrato rispetto alla finestra */
-.admin-site-footer {
-  width: 100%;
-  max-width: none;
-  margin: 10px 0 0;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-.admin-site-footer .footer-signature {
-  width: 100%;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-/* V3.3.1 FIX DEFINITIVO — footer Area Gestore centrato nel viewport */
-body {
-  overflow-x: hidden;
-}
-
-.admin-site-footer {
-  position: relative !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  margin: 10px 0 0 !important;
-  padding: 0 20px 34px !important;
-  text-align: center !important;
-}
-
-.admin-site-footer .footer-signature {
-  width: min(1180px, calc(100vw - 40px)) !important;
-  max-width: 1180px !important;
-  margin: 0 auto !important;
-  text-align: center !important;
-}
-
-.admin-site-footer .gf-logo {
-  display: block !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-.admin-site-footer .footer-signature p {
-  text-align: center !important;
-}
-
-
-/* Footer inline Area Gestore */
-.footer-inline{
-  border-top:1px solid var(--line);
-  padding-top:16px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-  text-align:center;
-  color:var(--muted);
-}
-.gf-logo-inline{
-  width:28px;
-  height:28px;
-  object-fit:contain;
-  opacity:.9;
-}
-.footer-inline strong{color:var(--text);}

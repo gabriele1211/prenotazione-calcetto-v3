@@ -1,5 +1,5 @@
 window.APP_CONFIG = {
-  APP_VERSION: "3.3.1",
+  APP_VERSION: "3.3",
   SUPABASE_URL: "https://sbfpcsdnpnjbjvorydpr.supabase.co",
   SUPABASE_PUBLISHABLE_KEY: "sb_publishable_VGX2Wnp1KGMYwLtYTM-Gbw_6fosyXfC",
   DEFAULT_FIELD_DURATION_MINUTES: 60,
