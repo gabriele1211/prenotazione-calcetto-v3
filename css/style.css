@@ -636,26 +636,52 @@ input:invalid:not(:placeholder-shown) { border-color: #d98b84; }
 }
 
 
+/* V3.3.1 - footer Area Gestore centrato rispetto alla finestra */
+.admin-site-footer {
+  width: 100%;
+  max-width: none;
+  margin: 10px 0 0;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 
-/* ===== V3.3.1 Footer Area Gestore centrato ===== */
-.admin-site-footer{
-  width:100vw;
-  margin-left:calc(50% - 50vw);
-  padding:28px 0 20px;
-  text-align:center;
+.admin-site-footer .footer-signature {
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.admin-site-footer .footer-signature{
-  max-width:340px;
-  margin:0 auto;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+
+
+/* V3.3.1 FIX DEFINITIVO — footer Area Gestore centrato nel viewport */
+body {
+  overflow-x: hidden;
 }
-.admin-site-footer .gf-logo{
-  width:60px;
-  height:auto;
-  margin-bottom:8px;
+
+.admin-site-footer {
+  position: relative !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin: 10px 0 0 !important;
+  padding: 0 20px 34px !important;
+  text-align: center !important;
 }
-.admin-site-footer p{
-  margin:3px 0;
+
+.admin-site-footer .footer-signature {
+  width: min(1180px, calc(100vw - 40px)) !important;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+.admin-site-footer .gf-logo {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.admin-site-footer .footer-signature p {
+  text-align: center !important;
 }
