@@ -685,3 +685,15 @@ body {
 .admin-site-footer .footer-signature p {
   text-align: center !important;
 }
+
+
+/* V3.3.2 reset footer centering */
+.admin-site-footer{
+  position:static !important;
+  left:auto !important;
+  transform:none !important;
+  width:auto !important;
+  max-width:1180px !important;
+  margin:10px auto 0 !important;
+  padding:0 20px 34px !important;
+}
