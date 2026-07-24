@@ -158,27 +158,31 @@ function formatDateItalian(isoDate) {
     .format(new Date(`${isoDate}T12:00:00`));
 }
 
+function normalizeDocument(value) {
+  return value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
 
-function toTitleCase(value) {
+function formatPersonName(value) {
   return String(value || "")
-    .toLocaleLowerCase("it-IT")
     .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .map(part => part.charAt(0).toLocaleUpperCase("it-IT") + part.slice(1))
-    .join(" ");
+    .toLocaleLowerCase("it-IT")
+    .replace(/\s+/g, " ")
+    .replace(/(^|[\s'’-])([a-zà-öø-ÿ])/giu, (_, separator, letter) =>
+      separator + letter.toLocaleUpperCase("it-IT")
+    );
 }
 
 function formatPhone(value) {
-  let tel = String(value || "").replace(/\D/g, "");
-  if (tel.startsWith("0039")) tel = tel.slice(4);
-  if (tel.startsWith("39") && tel.length > 10) tel = tel.slice(2);
-  if (tel.length === 10) return tel.replace(/(\d{3})(\d{7})/, "$1 $2");
-  return tel;
-}
+  let digits = String(value || "").replace(/\D/g, "");
 
-function normalizeDocument(value) {
-  return value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (digits.startsWith("0039")) digits = digits.slice(4);
+  else if (digits.startsWith("39") && digits.length > 10) digits = digits.slice(2);
+
+  if (/^3\d{9}$/.test(digits)) {
+    return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+  }
+
+  return digits;
 }
 
 function isDateClosed(isoDate) {
@@ -309,11 +313,11 @@ async function createBooking() {
   if (!bookingsEnabled) return showMessage("Le prenotazioni sono temporaneamente sospese.", "warning");
   if (isDateClosed(dataInput.value)) return showMessage(closureMessage || "La data selezionata non è disponibile per chiusura.", "warning");
 
-  const nomeCliente = toTitleCase($("nome").value);
+  const nomeCliente = formatPersonName($("nome").value);
   const telefono = formatPhone($("telefono").value);
   const documentoNumero = normalizeDocument($("documento-numero").value);
   const documentoData = $("documento-data-rilascio").value;
-  let documentoRilasciatoDa = toTitleCase($("documento-rilasciato-da").value);
+  let documentoRilasciatoDa = $("documento-rilasciato-da").value.trim();
   const fieldId = campoSelect.value;
   const bookingDate = dataInput.value;
 
@@ -363,6 +367,12 @@ async function createBooking() {
 dataInput.min = localTodayIso(); dataInput.value = localTodayIso();
 $("documento-data-rilascio").max = localTodayIso();
 $("documento-numero").addEventListener("input", event => { event.target.value = normalizeDocument(event.target.value).slice(0, 9); });
+$("nome").addEventListener("blur", event => {
+  event.target.value = formatPersonName(event.target.value);
+});
+$("telefono").addEventListener("blur", event => {
+  event.target.value = formatPhone(event.target.value);
+});
 dataInput.addEventListener("change", loadSlots); campoSelect.addEventListener("change", loadSlots);
 $("aggiorna").addEventListener("click", loadSlots); prenotaButton.addEventListener("click", createBooking);
 $("documento-rilasciato-da").addEventListener("input", () => {
@@ -373,8 +383,4 @@ $("documento-rilasciato-da").addEventListener("focus", updateMunicipalitySuggest
 document.addEventListener("pointerdown", event => {
   if (!event.target.closest(".municipality-field")) closeMunicipalitySuggestions();
 });
-$("nome").addEventListener("blur",e=>e.target.value=toTitleCase(e.target.value));
-$("telefono").addEventListener("blur",e=>e.target.value=formatPhone(e.target.value));
-$("documento-rilasciato-da").addEventListener("blur",e=>e.target.value=toTitleCase(e.target.value));
-
 (async () => { await Promise.all([loadBookingStatus(), loadItalianMunicipalities()]); await loadFields(); })();
