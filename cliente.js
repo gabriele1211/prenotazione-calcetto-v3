@@ -162,29 +162,6 @@ function normalizeDocument(value) {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
-function formatPersonName(value) {
-  return String(value || "")
-    .trim()
-    .toLocaleLowerCase("it-IT")
-    .replace(/\s+/g, " ")
-    .replace(/(^|[\s'’-])([a-zà-öø-ÿ])/giu, (_, separator, letter) =>
-      separator + letter.toLocaleUpperCase("it-IT")
-    );
-}
-
-function formatPhone(value) {
-  let digits = String(value || "").replace(/\D/g, "");
-
-  if (digits.startsWith("0039")) digits = digits.slice(4);
-  else if (digits.startsWith("39") && digits.length > 10) digits = digits.slice(2);
-
-  if (/^3\d{9}$/.test(digits)) {
-    return `${digits.slice(0, 3)} ${digits.slice(3)}`;
-  }
-
-  return digits;
-}
-
 function isDateClosed(isoDate) {
   return Boolean(isoDate && closureStart && closureEnd && isoDate >= closureStart && isoDate <= closureEnd);
 }
@@ -232,8 +209,8 @@ async function loadFields() {
   await loadSlots();
 }
 
-async function loadSlots() {
-  clearMessage();
+async function loadSlots(preserveMessage = false) {
+  if (!preserveMessage) clearMessage();
   selectedStart = selectedEnd = null;
   selectedText.textContent = "Nessun orario selezionato.";
   slotsBox.innerHTML = "<p>Caricamento disponibilità...</p>";
@@ -313,8 +290,8 @@ async function createBooking() {
   if (!bookingsEnabled) return showMessage("Le prenotazioni sono temporaneamente sospese.", "warning");
   if (isDateClosed(dataInput.value)) return showMessage(closureMessage || "La data selezionata non è disponibile per chiusura.", "warning");
 
-  const nomeCliente = formatPersonName($("nome").value);
-  const telefono = formatPhone($("telefono").value);
+  const nomeCliente = $("nome").value.trim();
+  const telefono = $("telefono").value.trim();
   const documentoNumero = normalizeDocument($("documento-numero").value);
   const documentoData = $("documento-data-rilascio").value;
   let documentoRilasciatoDa = $("documento-rilasciato-da").value.trim();
@@ -360,19 +337,17 @@ async function createBooking() {
   municipalitySelectionConfirmed = false;
   closeMunicipalitySuggestions();
   $("privacy").checked = false;
-  await loadSlots();
-  showMessage(`<strong>✅ Prenotazione confermata</strong><br>${fieldName}, ${formatDateItalian(bookingDate)}, ${confirmedStart}–${confirmedEnd}.<br><br><strong>📷 Fai uno screenshot di questa schermata</strong> per ricordarti dell’appuntamento.<br><br>Per modificare o annullare telefona al <a href="tel:${APP_CONFIG.CONTACT_PHONE_LINK}"><strong>${APP_CONFIG.CONTACT_PHONE_DISPLAY}</strong></a>.`, "success", true);
+  await loadSlots(true);
+  const confirmationHtml = `<strong>✅ Prenotazione confermata</strong><br>${fieldName}, ${formatDateItalian(bookingDate)}, ${confirmedStart}–${confirmedEnd}.<br><br><strong>📷 Fai uno screenshot di questa schermata</strong> per ricordarti dell’appuntamento.<br><br>Per modificare o annullare telefona al <a href="tel:${APP_CONFIG.CONTACT_PHONE_LINK}"><strong>${APP_CONFIG.CONTACT_PHONE_DISPLAY}</strong></a>.`;
+  showMessage(confirmationHtml, "success", true);
+  requestAnimationFrame(() => {
+    showMessage(confirmationHtml, "success", true);
+  });
 }
 
 dataInput.min = localTodayIso(); dataInput.value = localTodayIso();
 $("documento-data-rilascio").max = localTodayIso();
 $("documento-numero").addEventListener("input", event => { event.target.value = normalizeDocument(event.target.value).slice(0, 9); });
-$("nome").addEventListener("blur", event => {
-  event.target.value = formatPersonName(event.target.value);
-});
-$("telefono").addEventListener("blur", event => {
-  event.target.value = formatPhone(event.target.value);
-});
 dataInput.addEventListener("change", loadSlots); campoSelect.addEventListener("change", loadSlots);
 $("aggiorna").addEventListener("click", loadSlots); prenotaButton.addEventListener("click", createBooking);
 $("documento-rilasciato-da").addEventListener("input", () => {
